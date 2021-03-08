@@ -19,43 +19,19 @@
           <td><%= @book.body %></td>
 
           <td>
-        <% if @book.favorited_by?(current_user) %>
-    <p>
-      <%= link_to book_favorites_path(@book), method: :delete do %>
-        ♥<%= @book.favorites.count %>
-      <% end %>
-    </p>
-    <% else %>
-    <p>
-      <%= link_to book_favorites_path(@book), method: :post do %>
-        ♡<%= @book.favorites.count %>
-      <% end %>
-    </p>
-  <% end %>
-   </td>
+        <td id="like-<%= @book.id %>">
+        <%= render partial: "favorites/favorite-btn", locals: { book: @book } %>
+       </td>
 
-  <td>
-<div class="comments">
-<p>コメント件数：<%= @book.book_comments.count %></p>
-<% @book.book_comments.each do |book_comment| %><br>
-  <%= attachment_image_tag(@book.user, :profile_image, :fill, 100, 100, fallback: "no-image-icon.jpg") %><br>
-  <%= book_comment.user.name %>
-  <%= book_comment.comment %>
-  <% if book_comment.user == current_user %>
-    <%= link_to 'Destroy', book_book_comment_path(book_comment.book, book_comment), method: :delete, class: "btn btn-sm btn-danger destroy_book_#{@book.id}" %>
-  <% end %>
-  <% end %>
-</div>
-<div class="new-comment">
-<%= form_with(model:[@book, @book_comment], local: true) do |f| %>
-  <%= f.text_area :comment, :size=>"70x10" %>
-  <%= f.submit "送信" %>
+       <td>
+       <div class="comments">
+         <p>コメント件数：<%= @book.book_comments.count %></p>
+         <div id="comment-<%= @book.id %>">
+         <%= render partial: "books/comment", locals: { book: @book, book_comment: @book_comment } %>
+　　　　　</div>
 
-<% end %>
-</div>
-
-
-</td>
+        </div>
+        </td>
 
         </tr>
       </table>
